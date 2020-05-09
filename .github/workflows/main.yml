@@ -39,12 +39,11 @@ jobs:
           dotnet build --configuration Release
           dotnet publish -c Release -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp' 
       
-      #SCA
-      - name: Snyk
-        uses: snyk/actions/dotnet@master
-        env: 
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          
+      - uses: actions/checkout@master
+      - name: trufflehog-actions-scan
+        uses: edplato/trufflehog-actions-scan@master
+        with:
+          scanArguments: "--regex --entropy=False --max_depth=5 --rules /regexes.json" # Add custom options here*
           
           
       # Deploy to Azure Web apps
